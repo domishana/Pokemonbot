@@ -31,10 +31,11 @@ async def on_message(message):
     if not re.match('.+の図鑑$', message.content):
         return
 
-    json_open = open('pokedex_zen.json', 'r')
-    json_load = json.load(json_open)
+    with open('pokedex_zen.json', 'r') as json_open:
+        json_load = json.load(json_open)
+
     # メッセージを書きます
-    m = message.content[0:len(message.content)-3]
+    m = message.content[:-3]
 
     # メッセージが送られてきたチャンネルへメッセージを送ります
     if m in json_load:
@@ -46,11 +47,11 @@ async def on_message(message):
                 message_send = message_send + \
                     '%s' % (value) + " \n" + ' HP 攻撃 防御 特攻 特防 素早 合計\n'
             elif key == 'HP':
-                message_send = message_send + '%3d' % (int(value))
+                message_send += '%3d' % (int(value))
             else:
-                message_send = message_send + '%4d' % (int(value))
+                message_send += '%4d' % (int(value))
 
-        message_send = message_send + "```"
+        message_send += "```"
         print('0 ' + m)
     else:
         message_send = "ポケモンがみつからないロト！"
